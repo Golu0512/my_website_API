@@ -1,2 +1,2 @@
-gitignore
-src/env
+.env
+.env.test
