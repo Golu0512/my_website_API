@@ -1,2 +1,2 @@
-.env
-.env.test
+./src/.env
+.src/.env.test
