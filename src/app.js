@@ -139,21 +139,3 @@ app.get("/old_movies", async (req, res) => {
 app.listen(port, () => {
     console.log("server started on port ", port);
 });
-
-
-// app.get('/old_movies', async (req, res) => {
-//     try {
-//         const { page = 1, limit = 10 } = req.query;
-//         const options = {
-//             page: parseInt(page),
-//             limit: parseInt(limit)
-//         };
-
-//         const result = await OldMovies.paginate({}, options);
-
-//         return res.json(result);
-//     } catch (error) {
-//         console.error('Error fetching old movies:', error);
-//         return res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// });
