@@ -4,12 +4,15 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const connectedDB = require("./database/databaseConnection");
 const oldmovieSchema = require("./schemas/oldmovieSchema");
+const adminusersSchema = require("./schemas/dashboarduserSchema");
 
 connectedDB();
 
 const OldMovies = mongoose.model("oldmovies", oldmovieSchema);
+const adminUser = mongoose.model("dashboard_users", adminusersSchema);
 
 const app = express();
 
@@ -17,6 +20,22 @@ const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.post('/admin_login', async (req, res) => {
+    const { email, password } = req.body;
+    const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+    const result = await adminUser.findOne({email});
+
+    console.log(result);
+
+    if (!result || result.password !== password) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    const token = jwt.sign({ userId: result._id, email: result.email }, secretKey, {
+        expiresIn: '1h', // Token expiration time
+    });
+    res.json({ message: 'Login successful', token });
+})
 
 app.post("/insert_old_movie", async (req, res) => {
     try {
