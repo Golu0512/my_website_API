@@ -23,18 +23,16 @@ app.use(bodyParser.json());
 
 app.post('/admin_login', async (req, res) => {
     const { email, password } = req.body;
-    const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+    // const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
     const result = await adminUser.findOne({email});
-
-    console.log(result);
 
     if (!result || result.password !== password) {
         return res.status(401).json({ message: 'Invalid email or password' });
     }
-    const token = jwt.sign({ userId: result._id, email: result.email }, secretKey, {
-        expiresIn: '1h', // Token expiration time
-    });
-    res.json({ message: 'Login successful', token });
+    // const token = jwt.sign({ userId: result._id, email: result.email }, secretKey, {
+    //     expiresIn: '1h', // Token expiration time
+    // });
+    res.json({ message: 'Login successful', result });
 })
 
 app.post("/insert_old_movie", async (req, res) => {
