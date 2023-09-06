@@ -160,8 +160,14 @@ app.post('/update_old_movie', async (req, res) => {
 
 app.get("/old_movies", async (req, res) => {
     try {
-        const data = await OldMovies.find();
-        res.json(data);
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 18;
+
+        const skip = (page - 1) * limit;
+
+        const total = await OldMovies.countDocuments();
+        const data = await OldMovies.find().skip(skip).limit(limit);
+        res.json({data, total, page, limit});
     } catch (error) {
         console.error('Error fetching old movies:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
