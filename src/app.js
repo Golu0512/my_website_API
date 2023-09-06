@@ -8,11 +8,13 @@ const jwt = require("jsonwebtoken");
 const connectedDB = require("./database/databaseConnection");
 const oldmovieSchema = require("./schemas/oldmovieSchema");
 const adminusersSchema = require("./schemas/dashboarduserSchema");
+const userrequirementSchema = require('./schemas/userrequirementSchema')
 
 connectedDB();
 
 const OldMovies = mongoose.model("oldmovies", oldmovieSchema);
 const adminUser = mongoose.model("dashboard_users", adminusersSchema);
+const userRequirement = mongoose.model("user_requirement", userrequirementSchema);
 
 const app = express();
 
@@ -20,6 +22,20 @@ const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.post('/user_requirement', async (req, res) => {
+    const { movie_name, email, mobile_number } = req.body;
+    try {
+        if (!movie_name || !email || !mobile_number) {
+            return res.json({ message: 'Please fill all fields' });
+        }
+        const requirement = new userRequirement({movie_name, email, mobile_number});
+        requirement.save();
+        res.json({ message: 'Request submitted successfully' });
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 app.post('/admin_login', async (req, res) => {
     const { email, password } = req.body;
