@@ -161,12 +161,13 @@ app.post('/update_old_movie', async (req, res) => {
 app.get("/old_movies", async (req, res) => {
     try {
         const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 18;
+        const limit = Number(req.query.limit);
+        const search = req.query.search || '';
 
         const skip = (page - 1) * limit;
 
         const total = await OldMovies.countDocuments();
-        const data = await OldMovies.find().skip(skip).limit(limit);
+        const data = await OldMovies.find({movie_name:{$regex:search, $options: 'i'}}).skip(skip).limit(limit);
         res.json({data, total, page, limit});
     } catch (error) {
         console.error('Error fetching old movies:', error);
