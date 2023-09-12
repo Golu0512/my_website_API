@@ -48,7 +48,7 @@ app.post('/admin_login', async (req, res) => {
     // const token = jwt.sign({ userId: result._id, email: result.email }, secretKey, {
     //     expiresIn: '1h', // Token expiration time
     // });
-    res.json({ message: 'Login successful', result });
+    res.json({ message: 'Login successful', data:{full_name:result.full_name, role:result.role} });
 })
 
 app.post("/insert_old_movie", async (req, res) => {
