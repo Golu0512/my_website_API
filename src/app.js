@@ -54,6 +54,11 @@ app.post('/admin_login', async (req, res) => {
 app.post("/insert_old_movie", async (req, res) => {
     try {
         const oldMovieData = req.body;
+        const {movie_name} = oldMovieData;
+        const data = await OldMovies.findOne({ movie_name });
+        if (data) {
+            return res.status(200).json({ message: "Movie Already Inserted!" });
+        }
         const oldMovie = new OldMovies(oldMovieData);
         await oldMovie.save();
 
