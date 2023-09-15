@@ -23,6 +23,11 @@ const port = process.env.PORT || 8080;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/show_movie_request', async (req, res) => {
+    const data = await userRequirement.find();
+    res.status(200).json({ message: 'all movie request', data });
+})
+
 app.post('/user_requirement', async (req, res) => {
     const { movie_name, email, mobile_number } = req.body;
     try {
