@@ -24,7 +24,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/show_movie_request', async (req, res) => {
-    const data = await userRequirement.find();
+    const data = await userRequirement.find().select({ __v: 0});
     res.status(200).json({ message: 'all movie request', data });
 })
 
